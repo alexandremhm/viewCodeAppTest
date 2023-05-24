@@ -26,8 +26,21 @@ class ViewController: UIViewController {
         button.layer.cornerRadius = 8
         button.layer.borderWidth = 1
         button.layer.borderColor = UIColor.white.cgColor
-        button.addTarget(ViewController.self, action: #selector(testButtonTapped), for: .touchUpInside)
+        button.addTarget(nil, action: #selector(testButtonTapped), for: .touchUpInside)
         return button
+    }()
+    
+    private var counter: Int = 0 {
+        didSet {
+            updateCounterLabel()
+        }
+    }
+    
+    private let counterLabel: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 18)
+        return label
     }()
     
     override func viewDidLoad() {
@@ -39,9 +52,11 @@ class ViewController: UIViewController {
     private func setupViews() {
         view.addSubview(titleLabel)
         view.addSubview(testButton)
+        view.addSubview(counterLabel)
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         testButton.translatesAutoresizingMaskIntoConstraints = false
+        counterLabel.translatesAutoresizingMaskIntoConstraints = false
         testButton.widthAnchor.constraint(greaterThanOrEqualToConstant: 120).isActive = true
         
         NSLayoutConstraint.activate([
@@ -49,11 +64,20 @@ class ViewController: UIViewController {
             titleLabel.bottomAnchor.constraint(equalTo: testButton.topAnchor, constant: -16),
             
             testButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            testButton.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            testButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
+            counterLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            counterLabel.topAnchor.constraint(equalTo: testButton.bottomAnchor, constant: 16)
         ])
+        
+        updateCounterLabel()
     }
     
-    @objc private static func testButtonTapped() {
-        print("Test button tapped")
+    @objc private func testButtonTapped() {
+        counter += 1
+    }
+    
+    private func updateCounterLabel() {
+        counterLabel.text = "Counter: \(counter)"
     }
 }
